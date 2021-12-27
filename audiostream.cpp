@@ -1,7 +1,8 @@
 #include "audiostream.h"
 
-AudioStream::AudioStream(QObject *parent)
+AudioStream::AudioStream(QObject *parent, QAudioSink* audiosink)
     : QBuffer{parent} {
+    audio = audiosink;
 }
 
 AudioStream::~AudioStream()
@@ -10,16 +11,17 @@ AudioStream::~AudioStream()
 }
 
 qint64 AudioStream::readData(char *data, qint64 maxSize) {
-    qreal frequency = 261.63;
+    qreal frequency = 440;
 
     int i = 0;
     while (i < maxSize) {
-        qreal t = QTime::currentTime().msecsSinceStartOfDay();
+        qreal t = samplesProcessed/qreal(audio->format().sampleRate());
         qint16 value = (qSin(M_PI * frequency * t))*32767;
 
         data[i] = (char) (value & 0xff);
         data[i+1] = (char) ((value >> 8) & 0xff);
         i += 2;
+        samplesProcessed++;
     }
 
     return i;

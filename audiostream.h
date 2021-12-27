@@ -1,17 +1,22 @@
 #pragma once
 
 #include <QIODevice>
+#include <QAudioSink>
+#include <QAudioFormat>
 #include <QBuffer>
-#include <QTime>
+#include <QDebug>
+//#include <QTime>
 
 class AudioStream : public QBuffer
 {
 public:
 
-    AudioStream(QObject *parent);
+    AudioStream(QObject *parent, QAudioSink *audiosink);
     ~AudioStream();
 
-    //bool isSequential() const override;
+    QAudioSink *audio;
+    qint64 samplesProcessed = 0;
+
     bool atEnd() const override;
     qint64 size() const override;
     qint64 bytesAvailable() const override;
