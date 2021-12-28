@@ -11,18 +11,21 @@ AudioStream::~AudioStream()
 }
 
 qint64 AudioStream::readData(char *data, qint64 maxSize) {
-    qreal frequency = 440; //standard A4
+    qreal frequency = 440/2;
     qreal volume = 1;
 
     int i = 0;
     while (i < maxSize) {
         qreal t = samplesProcessed/qreal(audio->format().sampleRate());
 
-        qreal osc1 = qSin(M_PI * frequency * t);
-        qreal osc2 = qSin(M_PI * (frequency*qPow(2.0,400.0/1200.0)) * t); //400 cents = major third
-        qreal osc3 = qSin(M_PI * (frequency*qPow(2.0,700.0/1200.0)) * t); //700 cents = perfect fifth
+        qreal osc1 = (qSin(M_PI * frequency * t)*qPow(0.7,t)*20 +
+                     qSin(M_PI * frequency*2 * t)*qPow(0.8,t)*qSin(4*t)*5 +
+                     qSin(M_PI * frequency*3 * t)*qPow(0.6,t)*qSin(2*t)*10 +
+                     qSin(M_PI * frequency*4 * t)*qPow(0.3,t)*qSin(0.5*t)*5 +
+                     qSin(M_PI * frequency*6 * t)*qPow(0.5,t)*qSin(0.2*t)*3)/43;
 
-        qint16 value = qMax(qMin(((osc1+osc2+osc3)/3)*32767*volume,32767.0),-32767.0);
+
+        qint16 value = qMax(qMin(osc1*32767*volume,32767.0),-32767.0);
 
         data[i] = (char) (value & 0xff);
         data[i+1] = (char) ((value >> 8) & 0xff);
