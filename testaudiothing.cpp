@@ -14,7 +14,7 @@ TestAudioThing::TestAudioThing(QObject *parent) : QObject(parent)
 
     audio = new QAudioSink(format, this);
     data = new AudioStream(this, audio);
-    data->open(QIODevice::ReadWrite);
-    audio->setBufferSize(2);
+    data->open(QBuffer::ReadWrite);
+    //audio->setBufferSize(2);
     audio->start(data);
 }
