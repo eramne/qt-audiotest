@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "testaudiothing.h"
+#include "audiocontroller.h"
 
 int main(int argc, char *argv[])
 {

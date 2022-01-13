@@ -8,7 +8,13 @@ Window {
     visible: true
     title: qsTr("Hello World")
 
-    TestAudioThing {
-        
+    AudioController {
+        volume: 0.5
+        modulatorFrequency: 4
+        modulationIndex: 10
+
+        Component.onCompleted: {
+            start();
+        }
     }
 }
