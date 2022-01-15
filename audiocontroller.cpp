@@ -43,7 +43,7 @@ qint64 AudioController::readData(char *data, qint64 maxSize) {
 
     int i = 0;
     while (i < maxSize) {
-        qreal t = qMax(samplesProcessed/qreal(audio->format().sampleRate()) - 1.0,0.0);
+        qreal t = getTime();
 
         qreal out = qSin((carrier_ang_frequency * t) + modulationIndex*qSin(modulator_ang_frequency*t));
 
@@ -56,6 +56,10 @@ qint64 AudioController::readData(char *data, qint64 maxSize) {
     }
 
     return i;
+}
+
+qreal AudioController::getTime() {
+    return qMax(samplesProcessed/qreal(audio->format().sampleRate()) - 1.0,0.0);
 }
 
 qint64 AudioController::writeData(const char *data, qint64 maxSize) {
@@ -76,4 +80,8 @@ qint64 AudioController::bytesAvailable() const {
 
 qint64 AudioController::pos() const {
     return 0;
+}
+
+bool AudioController::seek(qint64 pos) {
+    return false;
 }

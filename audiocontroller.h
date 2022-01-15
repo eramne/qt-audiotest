@@ -27,6 +27,7 @@ public:
     qint64 size() const override;
     qint64 bytesAvailable() const override;
     qint64 pos() const override;
+    bool seek(qint64 pos) override;
 
     Q_PROPERTY(qreal volume MEMBER volume NOTIFY volumeChanged)
     Q_PROPERTY(qreal carrierFrequency MEMBER carrierFrequency NOTIFY carrierFrequencyChanged)
@@ -44,12 +45,13 @@ public slots:
     void stop();
     void suspend();
     void resume();
+    qreal getTime();
 
 private:
-    qreal volume = 1;
-    qreal carrierFrequency = 220;
-    qreal modulatorFrequency = 440;
-    qreal modulationIndex = 1;
+    qreal volume = 0;
+    qreal carrierFrequency = 0;
+    qreal modulatorFrequency = 0;
+    qreal modulationIndex = 0;
 
 protected:
     qint64 readData(char *data, qint64 maxSize) override;
